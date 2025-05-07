@@ -1,12 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Post, Body } from '@nestjs/common';
+import { OpenaiService } from './openai/openai.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly openaiService: OpenaiService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Post('ask')
+  async askQuestion(@Body('question') question: string) {
+    const answer = await this.openaiService.ask(question);
+    return { answer };
   }
 }
